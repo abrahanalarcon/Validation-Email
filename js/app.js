@@ -57,26 +57,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function validar(e) {
-        if(e.target.value.trim() === '') {
+
+        if (e.target.value.trim() === '' && e.target.id !== 'CC') {
             mostrarAlerta(`El Campo ${e.target.id} es obligatorio`, e.target.parentElement);
             email[e.target.name] = '';
-            comprobarEmail();
-            return;
-        }
-
-        if((e.target.id === 'email' || e.target.id === 'CC') && !validarEmail(e.target.value)) {
+        } else if ((e.target.id === 'email' || e.target.id === 'CC') && !validarEmail(e.target.value)) {
             mostrarAlerta('El email no es válido', e.target.parentElement);
             email[e.target.name] = '';
-            comprobarEmail();
-            return;
+        } else {
+            limpiarAlerta(e.target.parentElement);
+            email[e.target.name] = e.target.value.trim().toLowerCase();
         }
-
-        limpiarAlerta(e.target.parentElement);
-
-        // Asignar los valores
-        email[e.target.name] = e.target.value.trim().toLowerCase();
-
-        // Comprobar el objeto de email
+    
         comprobarEmail();
     }
 
@@ -107,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function comprobarEmail() {
-        if(Object.values(email).includes('')) {
+        if(email.email === '' || email.asunto === ''|| email.mensaje === '') {
             btnSubmit.classList.add('opacity-50');
             btnSubmit.disabled = true;
             return
@@ -119,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function resetFormulario() {
         // reiniciar el objeto
         email.email = '';
-        CC.CC = '';
+        email.CC = '';
         email.asunto = '';
         email.mensaje = '';
 
